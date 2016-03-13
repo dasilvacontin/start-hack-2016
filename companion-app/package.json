@@ -1,0 +1,24 @@
+{
+  "name": "companion-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify -t brfs src/main.js -o dist/bundle.js",
+    "test": "standard",
+    "start": "chokidar 'src/**/*.js' -c 'npm test && npm run build' --initial"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "brfs": "^1.4.3",
+    "browserify": "^13.0.0",
+    "chokidar-cli": "^1.2.0",
+    "mustache": "^2.2.1",
+    "standard": "^6.0.8"
+  },
+  "dependencies": {
+    "hammerjs": "^2.0.6",
+    "lodash": "^4.6.1"
+  }
+}
