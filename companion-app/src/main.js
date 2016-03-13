@@ -4,8 +4,21 @@ var _defer = require('lodash/defer')
 var Item = require('./item.js')
 var ItemSlot = require('./item-slot.js')
 
+/* debugger in dom */
+var d = document.createElement('p')
+d.style.position = 'fixed'
+d.style.top = 0
+d.style.left = 0
+d.innerHTML = 'waiting'
+document.body.appendChild(d)
+
+/* fake ACBridge */
+var ACBridge = {}
+ACBridge.click = function (msg) { d.innerHTML = msg }
+
 /* prevents scrolling */
 function setUpScrollPreventing () {
+  d.innerHTML = 'setUpScrollPreventing'
   var preventer = function (ev) { ev.preventDefault() }
   document.addEventListener('touchstart', preventer)
   document.addEventListener('touchmove', preventer)
@@ -21,8 +34,20 @@ function setUpPanning () {
     threshold: 5
   })
   mc.add(Panner)
+  var lastCenter = null
+  mc.on('panstart', function (e) {
+    lastCenter = e.center
+    d.innerHTML = 'panstart: ' + lastCenter.x + ', ' + lastCenter.y
+  })
   mc.on('pan', function (e) {
-    console.log(e.center.x, e.center.y)
+    var incX = e.center.x - lastCenter.x
+    var incY = e.center.y - lastCenter.y
+    lastCenter = e.center
+    ACBridge.click('pan:' + incX + ':' + incY)
+    d.innerHTML = 'panstart: ' + incX + ', ' + incY
+  })
+  mc.on('panend', function () {
+    d.innerHTML = 'panend: ' + lastCenter.x + ', ' + lastCenter.y
   })
 }
 
@@ -112,6 +137,7 @@ document.addEventListener('touchend', function (ev) {
   var type = item.owner.type
   if (y < 50) {
     console.log('USED OBJECT TYPE: ' + type)
+    ACBridge.click('use:' + type)
     item.owner.setType(Item.TYPES.NONE)
     return
   }
