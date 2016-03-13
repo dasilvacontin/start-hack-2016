@@ -4,6 +4,23 @@ var _defer = require('lodash/defer')
 var Item = require('./item.js')
 var ItemSlot = require('./item-slot.js')
 
+var requestAnimationFrame = requestAnimationFrame || function (fn) {
+  setTimeout(fn, 16)
+}
+
+/* super h4x0r inbox */
+var inbox = document.createElement('p')
+inbox.style.display = 'none'
+inbox.setAttribute('id', 'inbox')
+document.body.appendChild(inbox)
+function inboxPoller () {
+  requestAnimationFrame(inboxPoller)
+  var msg = inbox.innerHTML
+  if (msg.length > 0) inbox.innerHTML = ''
+  parseIncomingMessage(msg)
+}
+requestAnimationFrame(inboxPoller)
+
 /* debugger in dom */
 var d = document.createElement('p')
 d.style.position = 'fixed'
@@ -151,7 +168,6 @@ document.addEventListener('touchend', function (ev) {
   closestSlot.item.combineWith(type)
 })
 
-/*
 function gotItem (type) {
   var freeSlot = itemSlots.reduce(function (prev, curr) {
     if (prev) return prev
@@ -162,10 +178,16 @@ function gotItem (type) {
   freeSlot.item.setType(type)
 }
 
-setInterval(function () {
-  gotItem(Item.TYPES.POTION)
-}, 2000)
-*/
+function parseIncomingMessage (msg) {
+  var args = msg.split(':')
+  var eventType = args[0]
+  switch (eventType) {
+    case 'get_item':
+      var itemType = Number(args[1]) || 0
+      gotItem(itemType)
+      break
+  }
+}
 
 function main () {
   setUpScrollPreventing()

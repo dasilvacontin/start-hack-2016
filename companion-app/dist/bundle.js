@@ -5196,7 +5196,7 @@ var Item = require('./item.js')
 
 function ItemSlot (id) {
   this.id = id
-  this.item = new Item(Math.floor(Math.random() * 2))
+  this.item = new Item(Math.floor(Math.random() * 3))
   this.createDOMElement()
 }
 
@@ -5247,13 +5247,18 @@ Item.prototype.createDOMElement = function () {
 Item.template = Buffer("PGltZyBzcmM9Int7IGltZ3VybCB9fSI+PHA+e3sgdGl0bGUgfX08L3A+Cg==","base64").toString() // eslint-disable-line
 Item.TYPES = {
   NONE: 0,
-  POTION: 1
+  POTION: 1,
+  BOOK: 2
 }
 Item.data = {}
 Item.data[Item.TYPES.NONE] = {}
 Item.data[Item.TYPES.POTION] = {
   title: 'Potion',
-  imgurl: 'img/potion.png'
+  imgurl: 'https://cdn1.iconfinder.com/data/icons/outlined-medieval-icons-pack/200/magic_square_flask-128.png'
+}
+Item.data[Item.TYPES.BOOK] = {
+  title: 'Book',
+  imgurl: 'https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/128/book_stack.png'
 }
 
 module.exports = Item
@@ -5265,6 +5270,23 @@ var _defer = require('lodash/defer')
 
 var Item = require('./item.js')
 var ItemSlot = require('./item-slot.js')
+
+var requestAnimationFrame = requestAnimationFrame || function (fn) {
+  setTimeout(fn, 16)
+}
+
+/* super h4x0r inbox */
+var inbox = document.createElement('p')
+inbox.style.display = 'none'
+inbox.setAttribute('id', 'inbox')
+document.body.appendChild(inbox)
+function inboxPoller () {
+  requestAnimationFrame(inboxPoller)
+  var msg = inbox.innerHTML
+  if (msg.length > 0) inbox.innerHTML = ''
+  parseIncomingMessage(msg)
+}
+requestAnimationFrame(inboxPoller)
 
 /* debugger in dom */
 var d = document.createElement('p')
@@ -5413,7 +5435,6 @@ document.addEventListener('touchend', function (ev) {
   closestSlot.item.combineWith(type)
 })
 
-/*
 function gotItem (type) {
   var freeSlot = itemSlots.reduce(function (prev, curr) {
     if (prev) return prev
@@ -5424,10 +5445,16 @@ function gotItem (type) {
   freeSlot.item.setType(type)
 }
 
-setInterval(function () {
-  gotItem(Item.TYPES.POTION)
-}, 2000)
-*/
+function parseIncomingMessage (msg) {
+  var args = msg.split(':')
+  var eventType = args[0]
+  switch (eventType) {
+    case 'get_item':
+      var itemType = Number(args[1]) || 0
+      gotItem(itemType)
+      break
+  }
+}
 
 function main () {
   setUpScrollPreventing()

@@ -2,7 +2,7 @@ var Item = require('./item.js')
 
 function ItemSlot (id) {
   this.id = id
-  this.item = new Item(Math.floor(Math.random() * 2))
+  this.item = new Item(Math.floor(Math.random() * 3))
   this.createDOMElement()
 }
 

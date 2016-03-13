@@ -34,13 +34,18 @@ Item.prototype.createDOMElement = function () {
 Item.template = fs.readFileSync(__dirname + '/templates/item.mustache').toString() // eslint-disable-line
 Item.TYPES = {
   NONE: 0,
-  POTION: 1
+  POTION: 1,
+  BOOK: 2
 }
 Item.data = {}
 Item.data[Item.TYPES.NONE] = {}
 Item.data[Item.TYPES.POTION] = {
   title: 'Potion',
-  imgurl: 'img/potion.png'
+  imgurl: 'https://cdn1.iconfinder.com/data/icons/outlined-medieval-icons-pack/200/magic_square_flask-128.png'
+}
+Item.data[Item.TYPES.BOOK] = {
+  title: 'Book',
+  imgurl: 'https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/128/book_stack.png'
 }
 
 module.exports = Item
