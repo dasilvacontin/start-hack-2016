@@ -5248,7 +5248,8 @@ Item.template = Buffer("PGltZyBzcmM9Int7IGltZ3VybCB9fSI+PHA+e3sgdGl0bGUgfX08L3A+
 Item.TYPES = {
   NONE: 0,
   POTION: 1,
-  BOOK: 2
+  BOOK: 2,
+  PC: 3
 }
 Item.data = {}
 Item.data[Item.TYPES.NONE] = {}
@@ -5259,6 +5260,10 @@ Item.data[Item.TYPES.POTION] = {
 Item.data[Item.TYPES.BOOK] = {
   title: 'Book',
   imgurl: 'https://cdn2.iconfinder.com/data/icons/windows-8-metro-style/128/book_stack.png'
+}
+Item.data[Item.TYPES.PC] = {
+  title: 'PC',
+  imgurl: 'http://pngwebicons.com/upload/pc_PNG8959.png'
 }
 
 module.exports = Item
